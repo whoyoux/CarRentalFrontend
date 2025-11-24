@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { betterFetch } from "@/lib/better-fetch";
+import { QUERY_KEYS } from "@/lib/query-keys";
 
 const useUser = () => {
   const { data, error, isFetching } = useQuery({
-    queryKey: ["user"],
+    queryKey: QUERY_KEYS.user,
     queryFn: async () => await betterFetch("@get/Auth/me"),
   });
 
