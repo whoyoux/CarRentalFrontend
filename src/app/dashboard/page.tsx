@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuthStore } from "@/stores/auth-store";
+import useUser from "@/hooks/use-user";
 
 const TAB_KEYS = {
   MY_RENTALS: "MY_RENTALS",
@@ -19,15 +19,15 @@ const TAB_KEYS = {
 
 const DashboardPage = () => {
   const router = useRouter();
-  const isAuthed = useAuthStore((state) => state.accessToken);
+  const { user, success } = useUser();
 
   useEffect(() => {
-    if (!isAuthed) {
+    if (!success) {
       router.push("/login");
     }
-  }, [isAuthed, router]);
+  }, [success, router]);
 
-  if (isAuthed) {
+  if (user) {
     return (
       <Tabs className="w-full" defaultValue={TAB_KEYS.MY_RENTALS}>
         <TabsList className="w-full">
@@ -40,7 +40,9 @@ const DashboardPage = () => {
           account history
         </TabsContent>
         <TabsContent value={TAB_KEYS.ACCOUNT_SETTINGS}>
-          account settings
+          account settings <br />
+          {user.data?.email} <br />
+          {user.data?.role} <br />
         </TabsContent>
       </Tabs>
     );
