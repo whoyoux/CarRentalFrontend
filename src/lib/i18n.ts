@@ -1,0 +1,51 @@
+export const i18n = {
+  auth: {
+    login: {
+      email: "Email",
+      password: "Password",
+      emailPlaceholder: "your@email.com",
+      passwordPlaceholder: "••••••••",
+      submitButton: "Log in",
+      submittingButton: "Logging in...",
+      emailMinLength: "Email must be at least 2 characters",
+      passwordMinLength: "Password must be at least 2 characters",
+    },
+    register: {
+      email: "Email",
+      password: "Password",
+      confirmPassword: "Confirm password",
+      emailPlaceholder: "your@email.com",
+      passwordPlaceholder: "••••••••",
+      submitButton: "Sign up",
+      submittingButton: "Registering...",
+      invalidEmail: "Invalid email address",
+      passwordMinLength: "Password must be at least 6 characters",
+      passwordsDoNotMatch: "Passwords do not match",
+    },
+    messages: {
+      loginSuccess: "Successfully logged in.",
+      loginErrorBadCredentials: "Bad email or password",
+      loginErrorGeneric: "Something went wrong.",
+      registerSuccess: "Registration completed successfully.",
+      registerErrorEmailTaken: "Email is already taken",
+      registerErrorGeneric: "Something went wrong.",
+      logoutSuccess: "Successfully logged out.",
+      sessionInvalid: "Session expired. Please log in again.",
+    },
+    logout: "Log out",
+    navigation: {
+      noAccount: "Don't have an account?",
+      signUp: "Sign up",
+      haveAccount: "Already have an account?",
+      signIn: "Sign in",
+    },
+  },
+  app: {
+    name: "CarRental",
+    description: "CarRental - app where you can rent a car",
+  },
+  cars: {
+    rent: "Rent",
+    carImageAlt: "car",
+  },
+} as const;
