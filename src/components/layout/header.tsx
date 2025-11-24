@@ -2,6 +2,7 @@
 
 import { User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { i18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
@@ -11,6 +12,7 @@ import { Button, buttonVariants } from "../ui/button";
 
 const Header = () => {
   const { logout } = useAuth();
+  const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.accessToken);
 
   return (
@@ -29,7 +31,14 @@ const Header = () => {
             >
               <User />
             </Link>
-            <Button onClick={logout} variant="outline">
+            <Button
+              onClick={() =>
+                logout(() => {
+                  router.push("/");
+                })
+              }
+              variant="outline"
+            >
               {i18n.auth.logout}
             </Button>
           </>

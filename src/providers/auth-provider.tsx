@@ -18,7 +18,7 @@ import { useAuthStore } from "@/stores/auth-store";
 type AuthContextType = {
   login: (data: LoginFormValues) => Promise<boolean>;
   register: (data: RegisterFormValues) => Promise<boolean>;
-  logout: () => void;
+  logout: (callback?: () => void) => void;
   verifySession: () => Promise<boolean>;
 };
 
@@ -179,11 +179,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   }, [accessToken, clearTokens, setLoading]);
 
-  const logout = useCallback(() => {
-    clearRefreshInterval();
-    clearTokens();
-    toast.success(i18n.auth.messages.logoutSuccess);
-  }, [clearTokens, clearRefreshInterval]);
+  const logout = useCallback(
+    (cb?: () => void) => {
+      clearRefreshInterval();
+      clearTokens();
+      toast.success(i18n.auth.messages.logoutSuccess);
+
+      cb?.();
+    },
+    [clearTokens, clearRefreshInterval]
+  );
 
   const value = {
     login,
