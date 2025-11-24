@@ -23,14 +23,6 @@ const Header = () => {
       <div className="flex items-center gap-2">
         {isAuthenticated ? (
           <>
-            <Link
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon" })
-              )}
-              href="/dashboard"
-            >
-              <User />
-            </Link>
             <Button
               onClick={() =>
                 logout(() => {
@@ -41,6 +33,14 @@ const Header = () => {
             >
               {i18n.auth.logout}
             </Button>
+            <Link
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon" })
+              )}
+              href="/dashboard"
+            >
+              <User />
+            </Link>
           </>
         ) : (
           <Link
