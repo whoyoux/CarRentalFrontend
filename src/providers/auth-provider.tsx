@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
   type PropsWithChildren,
@@ -13,6 +14,7 @@ import type { LoginFormValues } from "@/features/login/components/login-form";
 import type { RegisterFormValues } from "@/features/register/components/register-form";
 import { betterFetch } from "@/lib/better-fetch";
 import { i18n } from "@/lib/i18n";
+import { QUERY_KEYS } from "@/lib/query-keys";
 import { useAuthStore } from "@/stores/auth-store";
 
 type AuthContextType = {
@@ -36,6 +38,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isRefreshingRef = useRef(false);
+
+  const queryClient = useQueryClient();
 
   const clearRefreshInterval = useCallback(() => {
     if (intervalRef.current) {
@@ -183,11 +187,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     (cb?: () => void) => {
       clearRefreshInterval();
       clearTokens();
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.user });
       toast.success(i18n.auth.messages.logoutSuccess);
 
       cb?.();
     },
-    [clearTokens, clearRefreshInterval]
+    [clearTokens, clearRefreshInterval, queryClient]
   );
 
   const value = {

@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   experimental: {
     turbopackFileSystemCacheForDev: true,
+    viewTransition: true,
+  },
+  images: {
+    qualities: [75, 90, 100],
   },
 };
 
