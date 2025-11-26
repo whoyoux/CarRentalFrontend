@@ -19,9 +19,10 @@ type CarCardProps = {
   title: string;
   description: string;
   price: string;
+  imageUrl?: string;
 };
 
-const CarCard = ({ id, title, description, price }: CarCardProps) => (
+const CarCard = ({ id, title, description, price, imageUrl }: CarCardProps) => (
   <Card className="corner-squircle">
     <CardHeader>
       <CardTitle>{title}</CardTitle>
@@ -31,10 +32,12 @@ const CarCard = ({ id, title, description, price }: CarCardProps) => (
       <ViewTransition name={`car-img-${id}`}>
         <Image
           alt={i18n.cars.carImageAlt}
-          className="aspect-video w-full object-cover"
+          className="aspect-video w-full object-cover rounded-lg mb-4"
           loading="eager"
           quality={100}
-          src={CarImg}
+          src={imageUrl || CarImg}
+          width={500}
+          height={500}
         />
       </ViewTransition>
 

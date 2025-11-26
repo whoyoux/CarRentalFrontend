@@ -48,6 +48,34 @@ export const apiSchema = createSchema({
       role: z.string(),
     }),
   },
+  "@get/Car": {
+    output: z.array(z.object({
+      id: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+    })),
+  },
+  "@get/Car/:id": {
+    output: z.object({
+      id: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+      reservations: z.array(
+        z.object({
+          startDateTime: z.string(),
+          endDateTime: z.string(),
+        })
+      ),
+    }),
+  },
 });
 
 export const betterFetch = createFetch({

@@ -1,23 +1,50 @@
 "use client";
 
 import CarCard from "@/features/cars/components/car-card";
-
-const CAR_EXAMPLE = {
-  id: "test123",
-  title: "BMW M6 Competition",
-  description: "Sports car",
-  price: "$600 per day",
-};
+import useCars from "@/hooks/use-cars";
 
 export default function Home() {
+  const { cars, isLoading, error } = useCars();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-muted-foreground">Loading cars...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-destructive">Failed to load cars. Please try again later.</p>
+      </div>
+    );
+  }
+
+  if (!cars || cars.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-muted-foreground">No cars available at the moment.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-12">
       <div className="grid grid-cols-2 gap-4">
-        <CarCard {...CAR_EXAMPLE} id={"test"} />
-        <CarCard {...CAR_EXAMPLE} id={"test2"} />
-        <CarCard {...CAR_EXAMPLE} id={"test3"} />
-        <CarCard {...CAR_EXAMPLE} />
+        {cars.map((car) => (
+          <CarCard
+            key={car.id}
+            id={car.id.toString()}
+            title={`${car.brand} ${car.model}`}
+            description={car.description || `${car.year}`}
+            price={`$${car.pricePerDay} per day`}
+            imageUrl={car.imageUrl ?? undefined}
+          />
+        ))}
       </div>
     </div>
   );
 }
+
