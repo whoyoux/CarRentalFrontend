@@ -29,9 +29,15 @@ const RentCar = ({ carId }: RentCarProps) => {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col items-center">
           <ViewTransition name={`car-img-${carId}`}>
-            <div className="relative aspect-square w-full max-w-md">
-              <Image alt="sedan" fill priority quality={100} src={CarImg} />
-            </div>
+            <Image
+              alt="sedan"
+              className="aspect-square w-full max-w-md"
+              height={500}
+              priority
+              quality={100}
+              src={CarImg}
+              width={500}
+            />
           </ViewTransition>
           <Card className="w-full">
             <CardHeader>
