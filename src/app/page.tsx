@@ -40,7 +40,7 @@ export default function Home() {
             title={`${car.brand} ${car.model}`}
             description={car.description || `${car.year}`}
             price={`$${car.pricePerDay} per day`}
-            imageUrl={car.imageUrl ?? undefined}
+            imageUrl={car.imageUrl}
           />
         ))}
       </div>

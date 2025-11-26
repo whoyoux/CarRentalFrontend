@@ -1,6 +1,8 @@
-import Image from "next/image";
+"use client";
+
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { ViewTransition } from "react";
+import { useState, ViewTransition } from "react";
 import CarImg from "@/assets/images/car.png";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -19,40 +21,45 @@ type CarCardProps = {
   title: string;
   description: string;
   price: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
 };
 
-const CarCard = ({ id, title, description, price, imageUrl }: CarCardProps) => (
-  <Card className="corner-squircle">
-    <CardHeader>
-      <CardTitle>{title}</CardTitle>
-      <CardDescription>{description}</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <ViewTransition name={`car-img-${id}`}>
-        <Image
-          alt={i18n.cars.carImageAlt}
-          className="aspect-video w-full object-cover rounded-lg mb-4"
-          loading="eager"
-          quality={100}
-          src={imageUrl || CarImg}
-          width={500}
-          height={500}
-        />
-      </ViewTransition>
+const CarCard = ({ id, title, description, price, imageUrl }: CarCardProps) => {
+  const [image, setImage] = useState<string | StaticImageData>(imageUrl || CarImg);
 
-      <CardDescription>{price}</CardDescription>
-    </CardContent>
+  return (
+    <Card className="corner-squircle">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ViewTransition name={`car-img-${id}`}>
+          <Image
+            alt={i18n.cars.carImageAlt}
+            className="aspect-video w-full object-cover rounded-lg mb-4"
+            loading="eager"
+            quality={100}
+            src={image}
+            width={500}
+            height={500}
+            onError={() => setImage(CarImg)}
+          />
+        </ViewTransition>
 
-    <CardFooter className="flex-col gap-2">
-      <Link
-        className={cn(buttonVariants({ variant: "default" }), "w-full")}
-        href={`/rent/${id}`}
-      >
-        {i18n.cars.rent}
-      </Link>
-    </CardFooter>
-  </Card>
-);
+        <CardDescription>{price}</CardDescription>
+      </CardContent>
+
+      <CardFooter className="flex-col gap-2">
+        <Link
+          className={cn(buttonVariants({ variant: "default" }), "w-full")}
+          href={`/rent/${id}`}
+        >
+          {i18n.cars.rent}
+        </Link>
+      </CardFooter>
+    </Card>
+  );
+}
 
 export default CarCard;

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { ViewTransition } from "react";
+import Image, { StaticImageData } from "next/image";
+import { useEffect, useState, ViewTransition } from "react";
 import CarImg from "@/assets/images/car.png";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,9 @@ type RentCarProps = {
 const RentCar = ({ carId }: RentCarProps) => {
   const { user } = useUser();
   const { car, isLoading, error } = useCar(carId);
+  const [image, setImage] = useState<string | StaticImageData>(CarImg);
+
+  useEffect(() => setImage(car?.imageUrl ?? CarImg), [car]);
 
   const isLoggedIn = user?.data;
 
@@ -53,14 +56,15 @@ const RentCar = ({ carId }: RentCarProps) => {
               height={500}
               priority
               quality={100}
-              src={car.imageUrl || CarImg}
+              src={image}
               width={500}
+              onError={() => setImage(CarImg)}
             />
           </ViewTransition>
           <Card className="w-full">
             <CardHeader>
               <CardTitle>{car.brand} {car.model}</CardTitle>
-              <CardDescription>{car.year} - {car.description || "Luxury vehicle"}</CardDescription>
+              <CardDescription>{car.year}</CardDescription>
               <CardContent className="flex flex-col gap-4 px-0">
                 {car.description && (
                   <p className="">
