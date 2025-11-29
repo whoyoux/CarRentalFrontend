@@ -3,7 +3,6 @@
 import Image, { StaticImageData } from "next/image";
 import { useEffect, useState, ViewTransition } from "react";
 import CarImg from "@/assets/images/car.png";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,6 +13,9 @@ import {
 import useCar from "@/hooks/use-car";
 import useUser from "@/hooks/use-user";
 import GoBackButton from "@/components/layout/go-back-button";
+import ReviewsSection from "@/features/cars/components/reviews-section";
+import RentalCalendar from "./rental-calendar";
+import useCreateReservation from "@/hooks/use-create-reservation";
 
 type RentCarProps = {
   carId: string;
@@ -23,10 +25,28 @@ const RentCar = ({ carId }: RentCarProps) => {
   const { user } = useUser();
   const { car, isLoading, error } = useCar(carId);
   const [image, setImage] = useState<string | StaticImageData>(CarImg);
+  const createReservation = useCreateReservation();
 
   useEffect(() => setImage(car?.imageUrl ?? CarImg), [car]);
 
   const isLoggedIn = user?.data;
+
+  const handleRent = async (startDate: Date, endDate: Date) => {
+    if (!car) return;
+
+    // Set time to start of day for start date and end of day for end date
+    const startDateTime = new Date(startDate);
+    startDateTime.setHours(0, 0, 0, 0);
+    
+    const endDateTime = new Date(endDate);
+    endDateTime.setHours(23, 59, 59, 999);
+
+    await createReservation.mutateAsync({
+      carId: car.id,
+      startDateTime: startDateTime.toISOString(),
+      endDateTime: endDateTime.toISOString(),
+    });
+  };
 
   if (isLoading) {
     return (
@@ -86,12 +106,26 @@ const RentCar = ({ carId }: RentCarProps) => {
                 <span className="text-right font-semibold text-xl">
                   <span className="text-red-500">${car.pricePerDay}</span> per day
                 </span>
-                <Button className="w-full" disabled={!isLoggedIn}>
-                  {isLoggedIn ? "Rent" : "Please log in first"}
-                </Button>
               </CardContent>
             </CardHeader>
           </Card>
+          {isLoggedIn ? (
+            <RentalCalendar
+              reservations={car.reservations || []}
+              pricePerDay={car.pricePerDay}
+              onRent={handleRent}
+              isLoading={createReservation.isPending}
+            />
+          ) : (
+            <Card className="w-full">
+              <CardContent className="pt-6">
+                <p className="text-center text-muted-foreground">
+                  Please log in to rent this car
+                </p>
+              </CardContent>
+            </Card>
+          )}
+          <ReviewsSection carId={carId} />
         </div>
       </div>
     </ViewTransition>

@@ -76,6 +76,189 @@ export const apiSchema = createSchema({
       ),
     }),
   },
+  "@post/Car": {
+    input: z.object({
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+    }),
+    output: z.object({
+      id: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+    }),
+  },
+  "@put/Car/:id": {
+    input: z.object({
+      id: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+    }),
+    output: z.object({
+      id: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      year: z.number(),
+      pricePerDay: z.number(),
+      description: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+    }),
+  },
+  "@delete/Car/:id": {
+    output: z.object({
+      success: z.boolean(),
+    }),
+  },
+  "@get/Review/car/:carId": {
+    output: z.array(z.object({
+      id: z.number(),
+      rating: z.number(),
+      comment: z.string().nullable(),
+      carId: z.number(),
+      userId: z.string(),
+      userEmail: z.string(),
+      createdAt: z.string(),
+    })),
+  },
+  "@post/Review": {
+    input: z.object({
+      carId: z.number(),
+      rating: z.number(),
+      comment: z.string().nullable(),
+    }),
+    output: z.object({
+      id: z.number(),
+      rating: z.number(),
+      comment: z.string().nullable(),
+      carId: z.number(),
+      userId: z.string(),
+      userEmail: z.string(),
+      createdAt: z.string(),
+    }),
+  },
+  "@put/Review/:id": {
+    input: z.object({
+      rating: z.number(),
+      comment: z.string().nullable(),
+    }),
+    output: z.object({
+      id: z.number(),
+      rating: z.number(),
+      comment: z.string().nullable(),
+      carId: z.number(),
+      userId: z.string(),
+      userEmail: z.string(),
+      createdAt: z.string(),
+    }),
+  },
+  "@delete/Review/:id": {
+    output: z.object({
+      success: z.boolean(),
+    }),
+  },
+  "@get/Review/all": {
+    output: z.array(z.object({
+      id: z.number(),
+      rating: z.number(),
+      comment: z.string().nullable(),
+      carId: z.number(),
+      userId: z.string(),
+      userEmail: z.string(),
+      createdAt: z.string(),
+    })),
+  },
+  "@get/Reports/monthly-revenue": {
+    output: z.object({
+      year: z.number(),
+      month: z.number(),
+      totalReservations: z.number(),
+      totalRevenue: z.number(),
+      averageReservationValue: z.number(),
+    }),
+  },
+  "@get/Reports/user-history/:userId": {
+    output: z.array(z.object({
+      id: z.number(),
+      carId: z.number(),
+      brand: z.string(),
+      model: z.string(),
+      startDateTime: z.string(),
+      endDateTime: z.string(),
+      totalPrice: z.number(),
+      createdAt: z.string(),
+      status: z.string(),
+    })),
+  },
+  "@get/Reports/discount/:userId": {
+    output: z.object({
+      userId: z.string(),
+      discountPercentage: z.number(),
+    }),
+  },
+  "@get/Reservation/admin/all": {
+    output: z.array(z.object({
+      id: z.number(),
+      carId: z.number(),
+      carBrand: z.string(),
+      carModel: z.string(),
+      userId: z.string(),
+      userEmail: z.string(),
+      startDateTime: z.string(),
+      endDateTime: z.string(),
+      totalPrice: z.number(),
+      createdAt: z.string(),
+    })),
+  },
+  "@get/Reservation": {
+    output: z.array(z.object({
+      id: z.number(),
+      carId: z.number(),
+      carBrand: z.string(),
+      carModel: z.string(),
+      startDateTime: z.string(),
+      endDateTime: z.string(),
+      totalPrice: z.number(),
+      createdAt: z.string(),
+    })),
+  },
+  "@post/Reservation": {
+    input: z.object({
+      carId: z.number(),
+      startDateTime: z.string(),
+      endDateTime: z.string(),
+    }),
+    output: z.object({
+      id: z.number(),
+      carId: z.number(),
+      carBrand: z.string(),
+      carModel: z.string(),
+      startDateTime: z.string(),
+      endDateTime: z.string(),
+      totalPrice: z.number(),
+      createdAt: z.string(),
+    }),
+  },
+  "@delete/Reservation/:id": {
+    output: z.object({
+      success: z.boolean(),
+    }),
+  },
+  "@delete/Reservation/admin/:id": {
+    output: z.object({
+      success: z.boolean(),
+    }),
+  },
 });
 
 export const betterFetch = createFetch({

@@ -1,10 +1,13 @@
 {
+  // RULE: DO NOT USE 'any' TYPE! Use proper TypeScript types instead.
+  // If you need a type, define it in src/types/index.ts or create a specific type.
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",

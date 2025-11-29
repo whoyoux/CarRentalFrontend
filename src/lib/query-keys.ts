@@ -2,4 +2,13 @@ export const QUERY_KEYS = {
   user: ["user"],
   cars: ["cars"],
   car: (id: string) => ["car", id] as const,
+  reviews: ["reviews"],
+  reviewsByCar: (carId: string) => ["reviews", "car", carId] as const,
+  allReviews: ["reviews", "all"],
+  reports: ["reports"],
+  monthlyRevenue: (year?: number, month?: number) => ["reports", "monthly-revenue", year, month] as const,
+  userHistory: (userId: string) => ["reports", "user-history", userId] as const,
+  userDiscount: (userId: string) => ["reports", "discount", userId] as const,
+  adminReservations: ["reservations", "admin", "all"],
+  userReservations: ["reservations", "user"],
 } as const;
