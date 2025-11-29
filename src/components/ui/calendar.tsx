@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { i18n } from "@/lib/i18n";
 
 export interface CalendarProps {
   selected?: Date;
@@ -110,11 +111,8 @@ const Calendar = ({
   };
 
   const days = getDaysInMonth(currentMonth);
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const monthNames = i18n.calendar.months;
+  const dayNames = i18n.calendar.days;
 
   return (
     <div className={cn("p-4 border rounded-lg bg-background", className)}>

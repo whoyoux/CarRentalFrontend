@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="mt-12 border-t py-6 text-center text-sm text-muted-foreground">
       <p>
-        © {currentYear} {i18n.app.name}. Wszelkie prawa zastrzeżone.
+        © {currentYear} {i18n.app.name}. {i18n.app.footer.copyright}
       </p>
     </footer>
   );

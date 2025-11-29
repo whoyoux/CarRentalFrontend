@@ -28,6 +28,7 @@ import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import useAdminCancelReservation from "@/hooks/use-admin-cancel-reservation";
 import type { AdminReservation, UserReservationHistory } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 const AdminTab = () => {
   const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -69,7 +70,7 @@ const AdminTab = () => {
     : [];
 
   const handleCancelReservation = async (id: number) => {
-    if (confirm("Are you sure you want to cancel this reservation?")) {
+    if (confirm(i18n.dashboard.admin.allReservations.cancelConfirm)) {
       await adminCancelReservation.mutateAsync(id);
     }
   };
@@ -78,13 +79,13 @@ const AdminTab = () => {
     <div className="flex flex-col gap-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Monthly Revenue Report</CardTitle>
-          <CardDescription>View revenue statistics for a specific month</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.monthlyRevenue.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.monthlyRevenue.description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-4">
             <div>
-              <Label htmlFor="year" className="mb-1">Year</Label>
+              <Label htmlFor="year" className="mb-1">{i18n.dashboard.admin.monthlyRevenue.year}</Label>
               <Input
                 id="year"
                 type="number"
@@ -95,7 +96,7 @@ const AdminTab = () => {
               />
             </div>
             <div>
-              <Label htmlFor="month" className="mb-1">Month</Label>
+              <Label htmlFor="month" className="mb-1">{i18n.dashboard.admin.monthlyRevenue.month}</Label>
               <Input
                 id="month"
                 type="number"
@@ -107,55 +108,55 @@ const AdminTab = () => {
             </div>
           </div>
           {revenueLoading ? (
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.monthlyRevenue.loading}</p>
           ) : revenueError ? (
             <p className="text-destructive">
-              Error: {revenueError instanceof Error ? revenueError.message : "Failed to fetch monthly revenue"}
+              {i18n.dashboard.admin.monthlyRevenue.error} {revenueError instanceof Error ? revenueError.message : i18n.dashboard.admin.monthlyRevenue.failedToFetch}
             </p>
           ) : revenue ? (
             <div className="space-y-2">
-              <p><strong>Total Reservations:</strong> {revenue.totalReservations}</p>
-              <p><strong>Total Revenue:</strong> ${revenue.totalRevenue.toFixed(2)}</p>
-              <p><strong>Average Reservation Value:</strong> ${revenue.averageReservationValue.toFixed(2)}</p>
+              <p><strong>{i18n.dashboard.admin.monthlyRevenue.totalReservations}</strong> {revenue.totalReservations}</p>
+              <p><strong>{i18n.dashboard.admin.monthlyRevenue.totalRevenue}</strong> ${revenue.totalRevenue.toFixed(2)}</p>
+              <p><strong>{i18n.dashboard.admin.monthlyRevenue.averageReservationValue}</strong> ${revenue.averageReservationValue.toFixed(2)}</p>
             </div>
           ) : (
-            <p className="text-muted-foreground">No data available for this period</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.monthlyRevenue.noData}</p>
           )}
         </CardContent>
       </Card>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>User Reservation History</CardTitle>
-          <CardDescription>View reservation history for a specific user</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.userHistory.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.userHistory.description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="userId" className="mb-1">User ID</Label>
+            <Label htmlFor="userId" className="mb-1">{i18n.dashboard.admin.userHistory.userId}</Label>
             <Input
               id="userId"
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
-              placeholder="Enter user ID"
+              placeholder={i18n.dashboard.admin.userHistory.userIdPlaceholder}
             />
           </div>
           {selectedUserId && (
             <>
               {historyLoading ? (
-                <p className="text-muted-foreground">Loading...</p>
+                <p className="text-muted-foreground">{i18n.dashboard.admin.userHistory.loading}</p>
               ) : historyError ? (
                 <p className="text-destructive">
-                  Error: {historyError instanceof Error ? historyError.message : "Failed to fetch user history"}
+                  {i18n.dashboard.admin.userHistory.error} {historyError instanceof Error ? historyError.message : i18n.dashboard.admin.userHistory.failedToFetch}
                 </p>
               ) : userHistory && userHistory.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Car</TableHead>
-                      <TableHead>Start Date</TableHead>
-                      <TableHead>End Date</TableHead>
-                      <TableHead>Total Price</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{i18n.dashboard.admin.userHistory.car}</TableHead>
+                      <TableHead>{i18n.dashboard.admin.userHistory.startDate}</TableHead>
+                      <TableHead>{i18n.dashboard.admin.userHistory.endDate}</TableHead>
+                      <TableHead>{i18n.dashboard.admin.userHistory.totalPrice}</TableHead>
+                      <TableHead>{i18n.dashboard.admin.userHistory.status}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -171,18 +172,18 @@ const AdminTab = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">No reservations found for this user</p>
+                <p className="text-muted-foreground">{i18n.dashboard.admin.userHistory.noReservations}</p>
               )}
               {selectedUserId && (
                 <div className="mt-4">
                   {discountLoading ? (
-                    <p className="text-muted-foreground">Loading discount...</p>
+                    <p className="text-muted-foreground">{i18n.dashboard.admin.userHistory.loadingDiscount}</p>
                   ) : discountError ? (
                     <p className="text-destructive">
-                      Error: {discountError instanceof Error ? discountError.message : "Failed to fetch discount"}
+                      {i18n.dashboard.admin.userHistory.discountError} {discountError instanceof Error ? discountError.message : i18n.dashboard.admin.userHistory.failedToFetchDiscount}
                     </p>
                   ) : userDiscount ? (
-                    <p><strong>User Discount:</strong> {userDiscount.discountPercentage}%</p>
+                    <p><strong>{i18n.dashboard.admin.userHistory.userDiscount}</strong> {userDiscount.discountPercentage}%</p>
                   ) : null}
                 </div>
               )}
@@ -193,8 +194,8 @@ const AdminTab = () => {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Quick User Lookup</CardTitle>
-          <CardDescription>Select a user from recent reservations</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.quickLookup.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.quickLookup.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
@@ -214,24 +215,24 @@ const AdminTab = () => {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>All Reservations</CardTitle>
-          <CardDescription>Manage all reservations in the system</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.allReservations.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.allReservations.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {reservationsLoading ? (
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.allReservations.loading}</p>
           ) : reservations && reservations.length > 0 ? (
             <Table>
-              <TableCaption>A list of all reservations.</TableCaption>
+              <TableCaption>{i18n.dashboard.admin.allReservations.caption}</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>User Email</TableHead>
-                  <TableHead>Car</TableHead>
-                  <TableHead>Start Date</TableHead>
-                  <TableHead>End Date</TableHead>
-                  <TableHead>Total Price</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.id}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.userEmail}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.car}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.startDate}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.endDate}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.allReservations.totalPrice}</TableHead>
+                  <TableHead className="text-right">{i18n.dashboard.admin.allReservations.actions}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -263,10 +264,10 @@ const AdminTab = () => {
                               onClick={() => handleCancelReservation(reservation.id)}
                               disabled={adminCancelReservation.isPending}
                             >
-                              Cancel
+                              {i18n.dashboard.admin.allReservations.cancel}
                             </Button>
                           ) : (
-                            <span className="text-muted-foreground text-sm">Past reservation</span>
+                            <span className="text-muted-foreground text-sm">{i18n.dashboard.admin.allReservations.pastReservation}</span>
                           )}
                         </TableCell>
                       </TableRow>
@@ -275,28 +276,28 @@ const AdminTab = () => {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-muted-foreground">No reservations found</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.allReservations.noReservations}</p>
           )}
         </CardContent>
       </Card>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Users List</CardTitle>
-          <CardDescription>List of all users with rental statistics</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.usersList.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.usersList.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {reservationsLoading ? (
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.usersList.loading}</p>
           ) : usersMap.size > 0 ? (
             <Table>
-              <TableCaption>A list of users.</TableCaption>
+              <TableCaption>{i18n.dashboard.admin.usersList.caption}</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Icon</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Count of rentals</TableHead>
-                  <TableHead className="text-right">Total Amount</TableHead>
+                  <TableHead>{i18n.dashboard.admin.usersList.icon}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.usersList.email}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.usersList.rentalCount}</TableHead>
+                  <TableHead className="text-right">{i18n.dashboard.admin.usersList.totalAmount}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -313,33 +314,33 @@ const AdminTab = () => {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-muted-foreground">No users found</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.usersList.noUsers}</p>
           )}
         </CardContent>
       </Card>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Reservation Logs</CardTitle>
-          <CardDescription>View all reservation activity logs for all users in the system</CardDescription>
+          <CardTitle>{i18n.dashboard.admin.reservationLogs.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.admin.reservationLogs.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {logsLoading ? (
-            <p className="text-muted-foreground">Loading logs...</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.reservationLogs.loading}</p>
           ) : logsError ? (
             <p className="text-destructive">
-              Error: {logsError instanceof Error ? logsError.message : "Failed to fetch reservation logs"}
+              {i18n.dashboard.admin.reservationLogs.error} {logsError instanceof Error ? logsError.message : i18n.dashboard.admin.reservationLogs.failedToFetch}
             </p>
           ) : reservationLogs && reservationLogs.length > 0 ? (
             <Table>
-              <TableCaption>A list of all reservation activity logs.</TableCaption>
+              <TableCaption>{i18n.dashboard.admin.reservationLogs.caption}</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Reservation ID</TableHead>
-                  <TableHead>User ID</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Date</TableHead>
+                  <TableHead>{i18n.dashboard.admin.reservationLogs.id}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.reservationLogs.reservationId}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.reservationLogs.userId}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.reservationLogs.action}</TableHead>
+                  <TableHead>{i18n.dashboard.admin.reservationLogs.date}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -350,8 +351,8 @@ const AdminTab = () => {
                     <TableCell className="font-mono text-xs">{log.userId.substring(0, 8)}...</TableCell>
                     <TableCell>
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        log.action === "Created" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
-                        log.action === "Cancelled" ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" :
+                        log.action === i18n.dashboard.admin.reservationLogs.actions.created ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                        log.action === i18n.dashboard.admin.reservationLogs.actions.cancelled ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" :
                         "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
                       }`}>
                         {log.action}
@@ -363,7 +364,7 @@ const AdminTab = () => {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-muted-foreground">No reservation logs found</p>
+            <p className="text-muted-foreground">{i18n.dashboard.admin.reservationLogs.noLogs}</p>
           )}
         </CardContent>
       </Card>

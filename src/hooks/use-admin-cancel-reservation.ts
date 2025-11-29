@@ -3,6 +3,7 @@ import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { toast } from "sonner";
 import type { ErrorWithMessage } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 const useAdminCancelReservation = () => {
   const queryClient = useQueryClient();
@@ -20,10 +21,10 @@ const useAdminCancelReservation = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.cars });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.userReservations });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.reservationLogs });
-      toast.success("Reservation cancelled successfully!");
+      toast.success(i18n.messages.success.reservationCancelled);
     },
     onError: (error: ErrorWithMessage | Error) => {
-      const message = error?.message || "Failed to cancel reservation";
+      const message = error?.message || i18n.messages.error.failedToCancelReservation;
       toast.error(message);
     },
   });

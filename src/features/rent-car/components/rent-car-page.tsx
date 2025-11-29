@@ -16,6 +16,7 @@ import GoBackButton from "@/components/layout/go-back-button";
 import ReviewsSection from "@/features/cars/components/reviews-section";
 import RentalCalendar from "./rental-calendar";
 import useCreateReservation from "@/hooks/use-create-reservation";
+import { i18n } from "@/lib/i18n";
 
 type RentCarProps = {
   carId: string;
@@ -51,7 +52,7 @@ const RentCar = ({ carId }: RentCarProps) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-muted-foreground">Loading car details...</p>
+        <p className="text-muted-foreground">{i18n.rentCar.loading}</p>
       </div>
     );
   }
@@ -59,7 +60,7 @@ const RentCar = ({ carId }: RentCarProps) => {
   if (error || !car) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-destructive">Failed to load car details. Please try again later.</p>
+        <p className="text-destructive">{i18n.rentCar.loadError}</p>
       </div>
     );
   }
@@ -93,7 +94,7 @@ const RentCar = ({ carId }: RentCarProps) => {
                 )}
                 {car.reservations && car.reservations.length > 0 && (
                   <div className="flex flex-col gap-2">
-                    <h3 className="font-semibold">Upcoming Reservations:</h3>
+                    <h3 className="font-semibold">{i18n.rentCar.upcomingReservations}</h3>
                     <ul className="text-sm text-muted-foreground">
                       {car.reservations.map((reservation, index) => (
                         <li key={index}>
@@ -104,7 +105,7 @@ const RentCar = ({ carId }: RentCarProps) => {
                   </div>
                 )}
                 <span className="text-right font-semibold text-xl">
-                  <span className="text-red-500">${car.pricePerDay}</span> per day
+                  <span className="text-red-500">${car.pricePerDay}</span> {i18n.cars.perDay}
                 </span>
               </CardContent>
             </CardHeader>
@@ -120,7 +121,7 @@ const RentCar = ({ carId }: RentCarProps) => {
             <Card className="w-full">
               <CardContent className="pt-6">
                 <p className="text-center text-muted-foreground">
-                  Please log in to rent this car
+                  {i18n.rentCar.loginRequired}
                 </p>
               </CardContent>
             </Card>

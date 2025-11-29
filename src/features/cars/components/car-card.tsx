@@ -28,12 +28,14 @@ const CarCard = ({ id, title, description, price, imageUrl }: CarCardProps) => {
   const [image, setImage] = useState<string | StaticImageData>(imageUrl || CarImg);
 
   return (
-    <Card className="corner-squircle">
+    <Card className="corner-squircle h-full flex flex-col">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="h-12 line-clamp-2 truncate">
+          {description}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <ViewTransition name={`car-img-${id}`}>
           <Image
             alt={i18n.cars.carImageAlt}

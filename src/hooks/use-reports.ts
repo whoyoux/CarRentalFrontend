@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { useAuthStore } from "@/stores/auth-store";
+import { i18n } from "@/lib/i18n";
 
 export const useMonthlyRevenue = (year?: number, month?: number) => {
   const { data, error, isLoading } = useQuery({
@@ -19,12 +20,12 @@ export const useMonthlyRevenue = (year?: number, month?: number) => {
           "Content-Type": "application/json",
         },
       });
-      
+
       if (!res.ok) {
-        const errorData = await res.json().catch(() => ({ error: "Failed to fetch monthly revenue" }));
-        throw new Error(errorData.error || `HTTP ${res.status}: Failed to fetch monthly revenue`);
+        const errorData = await res.json().catch(() => ({ error: i18n.dashboard.admin.monthlyRevenue.failedToFetch }));
+        throw new Error(errorData.error || `HTTP ${res.status}: ${i18n.dashboard.admin.monthlyRevenue.failedToFetch}`);
       }
-      
+
       return res.json();
     },
   });
@@ -48,7 +49,7 @@ export const useUserHistory = (userId: string) => {
     queryKey: QUERY_KEYS.userHistory(userId),
     queryFn: async () => {
       if (!isValidGuid(userId)) {
-        throw new Error("Invalid user ID format. Please provide a valid GUID.");
+        throw new Error(i18n.messages.error.invalidUserId);
       }
       const res = await betterFetch("@get/Reports/user-history/:userId", {
         params: { userId },
@@ -78,7 +79,7 @@ export const useUserDiscount = (userId: string) => {
     queryKey: QUERY_KEYS.userDiscount(userId),
     queryFn: async () => {
       if (!isValidGuid(userId)) {
-        throw new Error("Invalid user ID format. Please provide a valid GUID.");
+        throw new Error(i18n.messages.error.invalidUserId);
       }
       const res = await betterFetch("@get/Reports/discount/:userId", {
         params: { userId },

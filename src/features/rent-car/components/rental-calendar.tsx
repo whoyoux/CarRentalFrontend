@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { i18n } from "@/lib/i18n";
 
 type RentalCalendarProps = {
   reservations: Array<{ startDateTime: string; endDateTime: string }>;
@@ -123,12 +124,12 @@ const RentalCalendar = ({ reservations, pricePerDay, onRent, isLoading }: Rental
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Select Rental Period</CardTitle>
-        <CardDescription>Choose your rental start and end dates</CardDescription>
+        <CardTitle>{i18n.rentCar.selectRentalPeriod}</CardTitle>
+        <CardDescription>{i18n.rentCar.selectRentalPeriodDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label className="mb-1">Select Dates</Label>
+          <Label className="mb-1">{i18n.rentCar.selectDates}</Label>
           <Calendar
             mode="range"
             startDate={startDate}
@@ -143,26 +144,26 @@ const RentalCalendar = ({ reservations, pricePerDay, onRent, isLoading }: Rental
         {startDate && endDate && (
           <div className="space-y-2 p-4 bg-muted rounded-lg">
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Start Date:</span>
+              <span className="text-sm text-muted-foreground">{i18n.rentCar.startDate}</span>
               <span className="text-sm font-medium">{startDate.toLocaleDateString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">End Date:</span>
+              <span className="text-sm text-muted-foreground">{i18n.rentCar.endDate}</span>
               <span className="text-sm font-medium">{endDate.toLocaleDateString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Available Days:</span>
+              <span className="text-sm text-muted-foreground">{i18n.rentCar.availableDays}</span>
               <span className="text-sm font-medium">
-                {calculateAvailableDays} {calculateAvailableDays === 1 ? "day" : "days"}
+                {calculateAvailableDays} {calculateAvailableDays === 1 ? i18n.rentCar.day : i18n.rentCar.days}
               </span>
             </div>
             {hasBlockedDatesInRange && (
               <div className="text-xs text-destructive font-medium">
-                ⚠️ Selected range contains blocked dates. Please select a different range.
+                {i18n.rentCar.blockedDatesWarning}
               </div>
             )}
             <div className="flex justify-between pt-2 border-t">
-              <span className="text-sm font-semibold">Total Price:</span>
+              <span className="text-sm font-semibold">{i18n.rentCar.totalPrice}</span>
               <span className="text-lg font-bold text-primary">${calculateTotalPrice().toFixed(2)}</span>
             </div>
           </div>
@@ -174,12 +175,12 @@ const RentalCalendar = ({ reservations, pricePerDay, onRent, isLoading }: Rental
           className="w-full"
           size="lg"
         >
-          {isLoading ? "Processing..." : canRent ? "Rent Car" : "Select dates to rent"}
+          {isLoading ? i18n.rentCar.processing : canRent ? i18n.rentCar.rentCar : i18n.rentCar.selectDatesToRent}
         </Button>
 
         {reservations.length > 0 && (
           <div className="text-xs text-muted-foreground">
-            <p className="font-semibold mb-1">Blocked dates (already reserved):</p>
+            <p className="font-semibold mb-1">{i18n.rentCar.blockedDates}</p>
             <ul className="space-y-1">
               {reservations.map((reservation, index) => (
                 <li key={index}>

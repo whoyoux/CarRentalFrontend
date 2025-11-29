@@ -3,6 +3,7 @@ import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { toast } from "sonner";
 import type { ErrorWithMessage } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 type CreateReviewInput = {
   carId: number;
@@ -24,10 +25,10 @@ const useCreateReview = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.reviewsByCar(String(data.carId)) });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.reviews });
-      toast.success("Review added successfully!");
+      toast.success(i18n.messages.success.reviewAdded);
     },
     onError: (error: ErrorWithMessage | Error) => {
-      const message = error?.message || "Failed to add review";
+      const message = error?.message || i18n.messages.error.failedToAddReview;
       toast.error(message);
     },
   });

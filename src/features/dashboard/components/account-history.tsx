@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useUserHistory } from "@/hooks/use-reports";
 import useUser from "@/hooks/use-user";
 import type { UserReservationHistory } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 const AccountHistory = () => {
   const { user } = useUser();
@@ -12,29 +13,29 @@ const AccountHistory = () => {
   const { data: history, isLoading } = useUserHistory(userId || "");
 
   if (!userId) {
-    return <div className="text-muted-foreground">Please log in to view your history</div>;
+    return <div className="text-muted-foreground">{i18n.dashboard.accountHistory.loginRequired}</div>;
   }
 
   if (isLoading) {
-    return <div className="text-muted-foreground">Loading history...</div>;
+    return <div className="text-muted-foreground">{i18n.dashboard.accountHistory.loading}</div>;
   }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Reservation History</CardTitle>
-        <CardDescription>Your complete rental history</CardDescription>
+        <CardTitle>{i18n.dashboard.accountHistory.title}</CardTitle>
+        <CardDescription>{i18n.dashboard.accountHistory.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {history && history.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Car</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>End Date</TableHead>
-                <TableHead>Total Price</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{i18n.dashboard.accountHistory.car}</TableHead>
+                <TableHead>{i18n.dashboard.accountHistory.startDate}</TableHead>
+                <TableHead>{i18n.dashboard.accountHistory.endDate}</TableHead>
+                <TableHead>{i18n.dashboard.accountHistory.totalPrice}</TableHead>
+                <TableHead>{i18n.dashboard.accountHistory.status}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,7 +59,7 @@ const AccountHistory = () => {
             </TableBody>
           </Table>
         ) : (
-          <p className="text-muted-foreground text-center py-4">No reservation history found</p>
+          <p className="text-muted-foreground text-center py-4">{i18n.dashboard.accountHistory.noHistory}</p>
         )}
       </CardContent>
     </Card>

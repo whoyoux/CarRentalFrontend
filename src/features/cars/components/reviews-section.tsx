@@ -27,6 +27,7 @@ import useUpdateReview from "@/hooks/use-update-review";
 import useDeleteReview from "@/hooks/use-delete-review";
 import useUser from "@/hooks/use-user";
 import { toast } from "sonner";
+import { i18n } from "@/lib/i18n";
 
 type ReviewsSectionProps = {
   carId: string;
@@ -79,7 +80,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
   };
 
   const handleDeleteReview = async (reviewId: number, reviewCarId: number) => {
-    if (!confirm("Are you sure you want to delete this review?")) return;
+    if (!confirm(i18n.reviews.deleteConfirm)) return;
     await deleteReview.mutateAsync({ id: reviewId, carId: reviewCarId });
   };
 
@@ -90,7 +91,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
   };
 
   if (isLoading) {
-    return <div className="text-muted-foreground">Loading reviews...</div>;
+    return <div className="text-muted-foreground">{i18n.reviews.loading}</div>;
   }
 
   return (
@@ -98,30 +99,30 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Reviews</CardTitle>
+            <CardTitle>{i18n.reviews.title}</CardTitle>
             <CardDescription>
               {reviews && reviews.length > 0 ? (
                 <>
-                  {averageRating.toFixed(1)} / 5.0 ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+                  {averageRating.toFixed(1)} / 5.0 ({reviews.length} {reviews.length !== 1 ? i18n.reviews.reviews : i18n.reviews.review})
                 </>
               ) : (
-                "No reviews yet"
+                i18n.reviews.noReviews
               )}
             </CardDescription>
           </div>
           {userId && !userReview && (
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>
-                <Button>Add Review</Button>
+                <Button>{i18n.reviews.addReview}</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add Review</DialogTitle>
-                  <DialogDescription>Share your experience with this car</DialogDescription>
+                  <DialogTitle>{i18n.reviews.addReviewTitle}</DialogTitle>
+                  <DialogDescription>{i18n.reviews.addReviewDescription}</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label className="mb-1">Rating</Label>
+                    <Label className="mb-1">{i18n.reviews.rating}</Label>
                     <div className="flex gap-2 mt-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -142,12 +143,12 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="comment" className="mb-1">Comment (optional)</Label>
+                    <Label htmlFor="comment" className="mb-1">{i18n.reviews.comment}</Label>
                     <Textarea
                       id="comment"
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      placeholder="Write your review..."
+                      placeholder={i18n.reviews.commentPlaceholder}
                       rows={4}
                     />
                   </div>
@@ -156,7 +157,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
                     disabled={createReview.isPending}
                     className="w-full"
                   >
-                    Submit Review
+                    {i18n.reviews.submitReview}
                   </Button>
                 </div>
               </DialogContent>
@@ -213,11 +214,11 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Edit Review</DialogTitle>
+                          <DialogTitle>{i18n.reviews.editReview}</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
                           <div>
-                            <Label className="mb-1">Rating</Label>
+                            <Label className="mb-1">{i18n.reviews.rating}</Label>
                             <div className="flex gap-2 mt-2">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <button
@@ -238,7 +239,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
                             </div>
                           </div>
                           <div>
-                            <Label htmlFor="edit-comment" className="mb-1">Comment</Label>
+                            <Label htmlFor="edit-comment" className="mb-1">{i18n.reviews.comment.replace(" (optional)", "")}</Label>
                             <Textarea
                               id="edit-comment"
                               value={comment}
@@ -251,7 +252,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
                             disabled={updateReview.isPending}
                             className="w-full"
                           >
-                            Update Review
+                            {i18n.reviews.updateReview}
                           </Button>
                         </div>
                       </DialogContent>
@@ -273,7 +274,7 @@ const ReviewsSection = ({ carId }: ReviewsSectionProps) => {
           ))
         ) : (
           <p className="text-muted-foreground text-center py-4">
-            No reviews yet. Be the first to review this car!
+            {i18n.reviews.noReviewsMessage}
           </p>
         )}
       </CardContent>

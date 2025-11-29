@@ -29,6 +29,7 @@ import useCreateCar from "@/hooks/use-create-car";
 import useUpdateCar from "@/hooks/use-update-car";
 import useDeleteCar from "@/hooks/use-delete-car";
 import type { Car } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 type CarFormData = {
   brand: string;
@@ -116,7 +117,7 @@ const CarsManagementTab = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm("Are you sure you want to delete this car?")) {
+    if (confirm(i18n.dashboard.carsManagement.allCars.deleteConfirm)) {
       await deleteCar.mutateAsync(id);
     }
   };
@@ -129,17 +130,17 @@ const CarsManagementTab = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Cars Management</CardTitle>
-              <CardDescription>Add, update, or remove cars from the system</CardDescription>
+              <CardTitle>{i18n.dashboard.carsManagement.title}</CardTitle>
+              <CardDescription>{i18n.dashboard.carsManagement.description}</CardDescription>
             </div>
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
-                <Button onClick={resetForm}>Add New Car</Button>
+                <Button onClick={resetForm}>{i18n.dashboard.carsManagement.addNewCar}</Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Add New Car</DialogTitle>
-                  <DialogDescription>Fill in the details to add a new car to the system</DialogDescription>
+                  <DialogTitle>{i18n.dashboard.carsManagement.addNewCarTitle}</DialogTitle>
+                  <DialogDescription>{i18n.dashboard.carsManagement.addNewCarDescription}</DialogDescription>
                 </DialogHeader>
                 <CarForm
                   formData={formData}
@@ -147,7 +148,7 @@ const CarsManagementTab = () => {
                   onSubmit={handleCreate}
                   isSubmitting={createCar.isPending}
                   isValid={isFormValid}
-                  submitLabel="Create Car"
+                  submitLabel={i18n.dashboard.carsManagement.form.createCar}
                 />
               </DialogContent>
             </Dialog>
@@ -159,8 +160,8 @@ const CarsManagementTab = () => {
         <Dialog open={!!editingCar} onOpenChange={(open) => !open && resetForm()}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Edit Car</DialogTitle>
-              <DialogDescription>Update the car details</DialogDescription>
+              <DialogTitle>{i18n.dashboard.carsManagement.editCar}</DialogTitle>
+              <DialogDescription>{i18n.dashboard.carsManagement.editCarDescription}</DialogDescription>
             </DialogHeader>
             <CarForm
               formData={formData}
@@ -168,7 +169,7 @@ const CarsManagementTab = () => {
               onSubmit={handleUpdate}
               isSubmitting={updateCar.isPending}
               isValid={isFormValid}
-              submitLabel="Update Car"
+              submitLabel={i18n.dashboard.carsManagement.form.updateCar}
             />
           </DialogContent>
         </Dialog>
@@ -176,24 +177,24 @@ const CarsManagementTab = () => {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>All Cars</CardTitle>
-          <CardDescription>List of all cars in the system</CardDescription>
+          <CardTitle>{i18n.dashboard.carsManagement.allCars.title}</CardTitle>
+          <CardDescription>{i18n.dashboard.carsManagement.allCars.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{i18n.dashboard.carsManagement.allCars.loading}</p>
           ) : cars && cars.length > 0 ? (
             <Table>
-              <TableCaption>A list of all cars.</TableCaption>
+              <TableCaption>{i18n.dashboard.carsManagement.allCars.caption}</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Brand</TableHead>
-                  <TableHead>Model</TableHead>
-                  <TableHead>Year</TableHead>
-                  <TableHead>Price/Day</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.id}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.brand}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.model}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.year}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.pricePerDay}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.description}</TableHead>
+                  <TableHead className="text-right">{i18n.dashboard.carsManagement.allCars.actions}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -213,7 +214,7 @@ const CarsManagementTab = () => {
                           onClick={() => handleEdit(car)}
                           disabled={updateCar.isPending || deleteCar.isPending}
                         >
-                          Edit
+                          {i18n.dashboard.carsManagement.allCars.edit}
                         </Button>
                         <Button
                           variant="destructive"
@@ -221,7 +222,7 @@ const CarsManagementTab = () => {
                           onClick={() => handleDelete(car.id)}
                           disabled={updateCar.isPending || deleteCar.isPending}
                         >
-                          Delete
+                          {i18n.dashboard.carsManagement.allCars.delete}
                         </Button>
                       </div>
                     </TableCell>
@@ -230,7 +231,7 @@ const CarsManagementTab = () => {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-muted-foreground">No cars found</p>
+            <p className="text-muted-foreground">{i18n.dashboard.carsManagement.allCars.noCars}</p>
           )}
         </CardContent>
       </Card>
@@ -252,29 +253,29 @@ const CarForm = ({ formData, setFormData, onSubmit, isSubmitting, isValid, submi
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="brand" className="mb-1">Brand *</Label>
+          <Label htmlFor="brand" className="mb-1">{i18n.dashboard.carsManagement.form.brand}</Label>
           <Input
             id="brand"
             value={formData.brand}
             onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-            placeholder="Toyota"
+            placeholder={i18n.dashboard.carsManagement.form.brandPlaceholder}
             required
           />
         </div>
         <div>
-          <Label htmlFor="model" className="mb-1">Model *</Label>
+          <Label htmlFor="model" className="mb-1">{i18n.dashboard.carsManagement.form.model}</Label>
           <Input
             id="model"
             value={formData.model}
             onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-            placeholder="Camry"
+            placeholder={i18n.dashboard.carsManagement.form.modelPlaceholder}
             required
           />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="year" className="mb-1">Year *</Label>
+          <Label htmlFor="year" className="mb-1">{i18n.dashboard.carsManagement.form.year}</Label>
           <Input
             id="year"
             type="number"
@@ -286,7 +287,7 @@ const CarForm = ({ formData, setFormData, onSubmit, isSubmitting, isValid, submi
           />
         </div>
         <div>
-          <Label htmlFor="pricePerDay" className="mb-1">Price Per Day ($) *</Label>
+          <Label htmlFor="pricePerDay" className="mb-1">{i18n.dashboard.carsManagement.form.pricePerDay}</Label>
           <Input
             id="pricePerDay"
             type="number"
@@ -299,23 +300,23 @@ const CarForm = ({ formData, setFormData, onSubmit, isSubmitting, isValid, submi
         </div>
       </div>
       <div>
-        <Label htmlFor="description" className="mb-1">Description</Label>
+        <Label htmlFor="description" className="mb-1">{i18n.dashboard.carsManagement.form.description}</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          placeholder="Car description..."
+          placeholder={i18n.dashboard.carsManagement.form.descriptionPlaceholder}
           rows={3}
         />
       </div>
       <div>
-        <Label htmlFor="imageUrl" className="mb-1">Image URL</Label>
+        <Label htmlFor="imageUrl" className="mb-1">{i18n.dashboard.carsManagement.form.imageUrl}</Label>
         <Input
           id="imageUrl"
           type="url"
           value={formData.imageUrl}
           onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-          placeholder="https://example.com/image.jpg"
+          placeholder={i18n.dashboard.carsManagement.form.imageUrlPlaceholder}
         />
       </div>
       <div className="flex justify-end gap-2">
@@ -323,7 +324,7 @@ const CarForm = ({ formData, setFormData, onSubmit, isSubmitting, isValid, submi
           onClick={onSubmit}
           disabled={!isValid || isSubmitting}
         >
-          {isSubmitting ? "Saving..." : submitLabel}
+          {isSubmitting ? i18n.dashboard.carsManagement.form.saving : submitLabel}
         </Button>
       </div>
     </div>

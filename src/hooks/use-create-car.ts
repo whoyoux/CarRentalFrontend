@@ -3,6 +3,7 @@ import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { toast } from "sonner";
 import type { ErrorWithMessage } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 type CreateCarInput = {
   brand: string;
@@ -27,10 +28,10 @@ const useCreateCar = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.cars });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.car(String(data.id)) });
-      toast.success("Car created successfully!");
+      toast.success(i18n.messages.success.carCreated);
     },
     onError: (error: ErrorWithMessage | Error) => {
-      const message = error?.message || "Failed to create car";
+      const message = error?.message || i18n.messages.error.failedToCreateCar;
       toast.error(message);
     },
   });

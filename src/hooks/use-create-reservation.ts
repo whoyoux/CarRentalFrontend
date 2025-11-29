@@ -4,6 +4,7 @@ import { QUERY_KEYS } from "@/lib/query-keys";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { ErrorWithMessage } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 type CreateReservationInput = {
   carId: number;
@@ -27,11 +28,11 @@ const useCreateReservation = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.car(String(data.carId)) });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.cars });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.adminReservations });
-      toast.success("Reservation created successfully!");
+      toast.success(i18n.messages.success.reservationCreated);
       router.push("/dashboard");
     },
     onError: (error: ErrorWithMessage | Error) => {
-      const message = error?.message || "Failed to create reservation";
+      const message = error?.message || i18n.messages.error.failedToCreateReservation;
       toast.error(message);
     },
   });

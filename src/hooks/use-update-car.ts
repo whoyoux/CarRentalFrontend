@@ -3,6 +3,7 @@ import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { toast } from "sonner";
 import type { ErrorWithMessage } from "@/types";
+import { i18n } from "@/lib/i18n";
 
 type UpdateCarInput = {
   id: number;
@@ -29,10 +30,10 @@ const useUpdateCar = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.cars });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.car(String(data.id)) });
-      toast.success("Car updated successfully!");
+      toast.success(i18n.messages.success.carUpdated);
     },
     onError: (error: ErrorWithMessage | Error) => {
-      const message = error?.message || "Failed to update car";
+      const message = error?.message || i18n.messages.error.failedToUpdateCar;
       toast.error(message);
     },
   });
