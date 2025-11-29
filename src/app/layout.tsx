@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${interSans.variable} font-sans antialiased`}>
         <Providers>
-          <main className="mx-auto max-w-3xl px-4">
+          <main className="mx-auto max-w-5xl px-4">
             <Header />
             {children}
             <Footer />
