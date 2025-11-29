@@ -206,6 +206,15 @@ export const apiSchema = createSchema({
       discountPercentage: z.number(),
     }),
   },
+  "@get/Reports/reservation-logs": {
+    output: z.array(z.object({
+      id: z.number(),
+      reservationId: z.number(),
+      userId: z.string(),
+      action: z.string(),
+      logDate: z.string(),
+    })),
+  },
   "@get/Reservation/admin/all": {
     output: z.array(z.object({
       id: z.number(),

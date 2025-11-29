@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMonthlyRevenue, useUserHistory, useUserDiscount } from "@/hooks/use-reports";
+import { useReservationLogs } from "@/hooks/use-reservation-logs";
 import { useQuery } from "@tanstack/react-query";
 import { betterFetch } from "@/lib/better-fetch";
 import { QUERY_KEYS } from "@/lib/query-keys";
@@ -37,6 +38,7 @@ const AdminTab = () => {
   const { data: revenue, isLoading: revenueLoading, error: revenueError } = useMonthlyRevenue(year, month);
   const { data: userHistory, isLoading: historyLoading, error: historyError } = useUserHistory(selectedUserId);
   const { data: userDiscount, isLoading: discountLoading, error: discountError } = useUserDiscount(selectedUserId);
+  const { data: reservationLogs, isLoading: logsLoading, error: logsError } = useReservationLogs();
   const adminCancelReservation = useAdminCancelReservation();
 
   const { data: reservations, isLoading: reservationsLoading } = useQuery({
@@ -312,6 +314,56 @@ const AdminTab = () => {
             </Table>
           ) : (
             <p className="text-muted-foreground">No users found</p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Reservation Logs</CardTitle>
+          <CardDescription>View all reservation activity logs for all users in the system</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {logsLoading ? (
+            <p className="text-muted-foreground">Loading logs...</p>
+          ) : logsError ? (
+            <p className="text-destructive">
+              Error: {logsError instanceof Error ? logsError.message : "Failed to fetch reservation logs"}
+            </p>
+          ) : reservationLogs && reservationLogs.length > 0 ? (
+            <Table>
+              <TableCaption>A list of all reservation activity logs.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Reservation ID</TableHead>
+                  <TableHead>User ID</TableHead>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {reservationLogs.map((log) => (
+                  <TableRow key={log.id}>
+                    <TableCell>{log.id}</TableCell>
+                    <TableCell>{log.reservationId}</TableCell>
+                    <TableCell className="font-mono text-xs">{log.userId.substring(0, 8)}...</TableCell>
+                    <TableCell>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        log.action === "Created" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                        log.action === "Cancelled" ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" :
+                        "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                      }`}>
+                        {log.action}
+                      </span>
+                    </TableCell>
+                    <TableCell>{new Date(log.logDate).toLocaleString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p className="text-muted-foreground">No reservation logs found</p>
           )}
         </CardContent>
       </Card>

@@ -9,6 +9,7 @@ export const QUERY_KEYS = {
   monthlyRevenue: (year?: number, month?: number) => ["reports", "monthly-revenue", year, month] as const,
   userHistory: (userId: string) => ["reports", "user-history", userId] as const,
   userDiscount: (userId: string) => ["reports", "discount", userId] as const,
+  reservationLogs: ["reports", "reservation-logs"],
   adminReservations: ["reservations", "admin", "all"],
   userReservations: ["reservations", "user"],
 } as const;

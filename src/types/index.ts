@@ -76,3 +76,11 @@ export type ErrorWithMessage = {
   message?: string;
 };
 
+export type ReservationLog = {
+  id: number;
+  reservationId: number;
+  userId: string;
+  action: string;
+  logDate: string;
+};
+
