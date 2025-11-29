@@ -193,7 +193,7 @@ const CarsManagementTab = () => {
                   <TableHead>{i18n.dashboard.carsManagement.allCars.model}</TableHead>
                   <TableHead>{i18n.dashboard.carsManagement.allCars.year}</TableHead>
                   <TableHead>{i18n.dashboard.carsManagement.allCars.pricePerDay}</TableHead>
-                  <TableHead>{i18n.dashboard.carsManagement.allCars.description}</TableHead>
+                  <TableHead>{i18n.dashboard.carsManagement.allCars.descriptionColumn}</TableHead>
                   <TableHead className="text-right">{i18n.dashboard.carsManagement.allCars.actions}</TableHead>
                 </TableRow>
               </TableHeader>

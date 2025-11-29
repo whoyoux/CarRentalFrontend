@@ -220,7 +220,7 @@ export const i18n = {
         model: "Model",
         year: "Year",
         pricePerDay: "Price/Day",
-        description: "Description",
+        descriptionColumn: "Description",
         actions: "Actions",
         edit: "Edit",
         delete: "Delete",
