@@ -1,6 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1
-
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -20,6 +18,10 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Next.js requires NEXT_PUBLIC_* variables at build time
+ARG NEXT_PUBLIC_BACKEND_PATH
+ENV NEXT_PUBLIC_BACKEND_PATH=${NEXT_PUBLIC_BACKEND_PATH}
 
 ENV NEXT_TELEMETRY_DISABLED=1
 

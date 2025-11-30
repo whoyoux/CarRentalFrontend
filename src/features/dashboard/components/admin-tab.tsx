@@ -51,11 +51,10 @@ const AdminTab = () => {
     },
   });
 
-  // Extract unique users from reservations
   const usersMap = new Map<string, { email: string; rentalCount: number; totalAmount: number }>();
 
   if (reservations) {
-    reservations.forEach((r: AdminReservation) => {
+    reservations.forEach((r) => {
       const existing = usersMap.get(r.userId) || { email: r.userEmail, rentalCount: 0, totalAmount: 0 };
       usersMap.set(r.userId, {
         email: r.userEmail,
@@ -66,7 +65,7 @@ const AdminTab = () => {
   }
 
   const uniqueUserIds = reservations
-    ? Array.from(new Set(reservations.map((r: AdminReservation) => r.userId)))
+    ? Array.from(new Set(reservations.map((r) => r.userId)))
     : [];
 
   const handleCancelReservation = async (id: number) => {
@@ -139,6 +138,11 @@ const AdminTab = () => {
               onChange={(e) => setSelectedUserId(e.target.value)}
               placeholder={i18n.dashboard.admin.userHistory.userIdPlaceholder}
             />
+            {selectedUserId && usersMap.has(selectedUserId) && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Email: {usersMap.get(selectedUserId)?.email}
+              </p>
+            )}
           </div>
           {selectedUserId && (
             <>
@@ -199,16 +203,19 @@ const AdminTab = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {uniqueUserIds.slice(0, 10).map((userId: string) => (
-              <Button
-                key={userId}
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedUserId(userId)}
-              >
-                {userId.substring(0, 8)}...
-              </Button>
-            ))}
+            {uniqueUserIds.slice(0, 10).map((userId: string) => {
+              const userData = usersMap.get(userId);
+              return (
+                <Button
+                  key={userId}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedUserId(userId)}
+                >
+                  {userData?.email || userId.substring(0, 8) + "..."}
+                </Button>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
@@ -247,7 +254,7 @@ const AdminTab = () => {
                     const now = new Date();
                     // Can only cancel if end date is in the future
                     const canCancel = endDate > now;
-                    
+
                     return (
                       <TableRow key={reservation.id}>
                         <TableCell>{reservation.id}</TableCell>
@@ -350,11 +357,10 @@ const AdminTab = () => {
                     <TableCell>{log.reservationId}</TableCell>
                     <TableCell className="font-mono text-xs">{log.userId.substring(0, 8)}...</TableCell>
                     <TableCell>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        log.action === i18n.dashboard.admin.reservationLogs.actions.created ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${log.action === i18n.dashboard.admin.reservationLogs.actions.created ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
                         log.action === i18n.dashboard.admin.reservationLogs.actions.cancelled ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" :
-                        "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                      }`}>
+                          "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                        }`}>
                         {log.action}
                       </span>
                     </TableCell>

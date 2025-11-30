@@ -20,7 +20,7 @@ const useAdminCancelReservation = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.adminReservations });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.cars });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.userReservations });
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.reservationLogs });
+      queryClient.invalidateQueries({ queryKey: ["reports"] });
       toast.success(i18n.messages.success.reservationCancelled);
     },
     onError: (error: ErrorWithMessage | Error) => {
